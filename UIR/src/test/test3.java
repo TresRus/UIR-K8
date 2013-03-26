@@ -10,4 +10,6 @@ public int incrementA()
 {
 	return a+1;
 }
+public void tvoru_chto_hochu()
+{}
 }
