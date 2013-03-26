@@ -10,4 +10,9 @@ public int getOne()
 	System.out.println("one");
 	return 1;
 }
+public int getTwo()
+{
+	System.out.println("two");
+	return 2;
+}
 }
