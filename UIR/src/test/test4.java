@@ -7,6 +7,7 @@ public test4()
 }
 public int getOne()
 {
+	System.out.println("one");
 	return 1;
 }
 }
