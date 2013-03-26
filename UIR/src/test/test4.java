@@ -5,4 +5,8 @@ public test4()
 {
 	System.out.println("aaa");
 }
+public int getOne()
+{
+	return 1;
+}
 }
