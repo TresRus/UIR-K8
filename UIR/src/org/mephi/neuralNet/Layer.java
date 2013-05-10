@@ -3,8 +3,16 @@ package org.mephi.neuralNet;
 public class Layer {
 	private Neuron[] neurons;
 
+	public void setNeurons(Neuron[] neurons) {
+		this.neurons = neurons;
+	}
+
 	public Neuron[] getNeurons() {
 		return neurons;
+	}
+	
+	public int getSize(){
+		return neurons.length;
 	}
 	
 	public Layer(int f, int numberOfInputs, int numberOfOutputs)

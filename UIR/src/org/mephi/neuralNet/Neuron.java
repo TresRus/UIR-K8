@@ -11,13 +11,17 @@ public class Neuron {
 		return weight;
 	}
 
+	public void setWeight(double[] weight) {
+		this.weight = weight;
+	}
+
 	public Neuron(int f, int numberOfInputs)
 	{
 		fun = f;
 		weight = new double[numberOfInputs];
 		for(int i = 0; i < weight.length; ++i)
 		{
-			weight[i] = ((gen.nextDouble() * 2.0) - 1.0) * 100000;
+			weight[i] = ((gen.nextDouble() * 1.0) - 0.5);
 		}
 	}
 	
