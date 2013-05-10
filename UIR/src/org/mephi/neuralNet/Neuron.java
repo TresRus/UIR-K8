@@ -21,7 +21,7 @@ public class Neuron {
 		weight = new double[numberOfInputs];
 		for(int i = 0; i < weight.length; ++i)
 		{
-			weight[i] = ((gen.nextDouble() * 1.0) - 0.5);
+			weight[i] = ((gen.nextDouble() * 1.0) - 0.5) * 0.7;
 		}
 	}
 	

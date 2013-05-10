@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Button;
 
 
 public class testWindow {
@@ -49,6 +50,7 @@ public class testWindow {
 	 */
 	public testWindow() {
 		initialize();
+		frame.getComponent(0);
 	}
 
 	/**

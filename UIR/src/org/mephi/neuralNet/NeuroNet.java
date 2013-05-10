@@ -69,6 +69,7 @@ public class NeuroNet {
 		if(test.length == layers[layers.length-1].getSize())
 		{
 			List<double[]> outs = new ArrayList<double[]>();
+			List<double[]> deltas = new ArrayList<double[]>();
 			
 			double[] out;
 			double[] res = in;
@@ -90,9 +91,10 @@ public class NeuroNet {
 			for(int i = 0; i < delta.length; ++i)
 			{
 				a = outs.get(layers.length-1)[i];
-				delta[i] = -a*(1-a)*(test[i] - a);
+				delta[i] = a*(1-a)*(test[i] - a);
 			}
-			countNewWeight(layers[layers.length-1],delta,outs.get(layers.length-1),n);
+			deltas.add(delta);
+			//countNewWeight(layers[layers.length-1],delta,outs.get(layers.length-1),n);
 			
 			double[] prevDelta;
 			for(int i = layers.length-2; i >= 0; --i)
@@ -108,9 +110,15 @@ public class NeuroNet {
 						sum += prevDelta[k] * layers[i+1].getNeurons()[k].getWeight()[j];
 					}
 					a = outs.get(i)[j];
-					delta[j] = -a*(1-a)*sum;
+					delta[j] = a*(1-a)*sum;
 				}
-				countNewWeight(layers[i],delta,outs.get(i),n);
+				deltas.add(delta);
+				//countNewWeight(layers[i],delta,outs.get(i),n);
+			}
+			
+			for(int i = 0; i < layers.length; ++i)
+			{
+				countNewWeight(layers[layers.length-1-i],deltas.get(i),outs.get(layers.length-1-i),n);
 			}
 			
 			return res;
