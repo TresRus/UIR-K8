@@ -5,6 +5,9 @@ import java.util.List;
 
 public class NeuroNet {
 	private Layer[] layers;
+	private double minVal;
+	private double devVal;
+	private int wSize;
 	
 	public Layer[] getLayers() {
 		return layers;
@@ -14,10 +17,22 @@ public class NeuroNet {
 		this.layers = layers;
 	}
 
-	public NeuroNet(int[] size,int[] functions, int numberOfInputs) throws Exception
+	public NeuroNet(double min, double max, int[] size,int[] functions, int numberOfInputs) throws Exception
 	{
+		minVal = min;
+		devVal = max - min;
 		if(size.length == functions.length)
 		{
+			wSize = 0;
+			int n = numberOfInputs;
+			int m = numberOfInputs;
+			for(int i = 0; i < size.length; ++i)
+			{
+				n = m;
+				m = size[i];
+				wSize += n*m;
+			}
+			
 			layers = new Layer[size.length];
 			int in = numberOfInputs;
 			int out = 0;
@@ -34,10 +49,22 @@ public class NeuroNet {
 		}
 	}
 	
-	public NeuroNet(int[] size,int[] functions, int numberOfInputs, double weightVal) throws Exception
+	public NeuroNet(double min, double max, int[] size,int[] functions, int numberOfInputs, double weightVal) throws Exception
 	{
+		minVal = min;
+		devVal = max - min;
 		if(size.length == functions.length)
 		{
+			wSize = 0;
+			int n = numberOfInputs;
+			int m = numberOfInputs;
+			for(int i = 0; i < size.length; ++i)
+			{
+				n = m;
+				m = size[i];
+				wSize += n*m;
+			}
+			
 			layers = new Layer[size.length];
 			int in = numberOfInputs;
 			int out = 0;
@@ -56,23 +83,27 @@ public class NeuroNet {
 	
 	public double[] runNet(double[] input) throws Exception
 	{
-		double[] res = input;
+		double[] res = normalize(input);
 		for(Layer l : layers)
 		{
 			res = l.runLayer(res);
 		}
-		return res;
+		return denormalize(res);
 	}
 	
-	public double[] trainNet(double[] in, double[] test, double n) throws Exception
+	public double[] trainNet(double[] in, double[] testArr, double n) throws Exception
 	{
-		if(test.length == layers[layers.length-1].getSize())
+		if(testArr.length == layers[layers.length-1].getSize())
 		{
 			List<double[]> outs = new ArrayList<double[]>();
 			List<double[]> deltas = new ArrayList<double[]>();
 			
 			double[] out;
-			double[] res = in;
+			double[] res = normalize(in);
+			for( double e : res)
+			{
+				//System.out.printf("%f \n", e);
+			}
 			for(Layer l : layers)
 			{
 				out = new double[l.getSize()];
@@ -86,12 +117,14 @@ public class NeuroNet {
 			
 			double[] delta;
 			double a;
+			double[] test = normalize(testArr);
 			
 			delta = new double[layers[layers.length-1].getSize()];
 			for(int i = 0; i < delta.length; ++i)
 			{
 				a = outs.get(layers.length-1)[i];
 				delta[i] = a*(1-a)*(test[i] - a);
+				//System.out.printf("delta %d : %f \n", i, delta[i]);
 			}
 			deltas.add(delta);
 			//countNewWeight(layers[layers.length-1],delta,outs.get(layers.length-1),n);
@@ -111,6 +144,7 @@ public class NeuroNet {
 					}
 					a = outs.get(i)[j];
 					delta[j] = a*(1-a)*sum;
+					//System.out.printf("delta %d %d : %f \n", i, j, delta[i]);
 				}
 				deltas.add(delta);
 				//countNewWeight(layers[i],delta,outs.get(i),n);
@@ -121,7 +155,7 @@ public class NeuroNet {
 				countNewWeight(layers[layers.length-1-i],deltas.get(i),outs.get(layers.length-1-i),n);
 			}
 			
-			return res;
+			return denormalize(res);
 		}
 		else
 		{
@@ -143,5 +177,25 @@ public class NeuroNet {
 			}
 			l.getNeurons()[i].setWeight(w);
 		}
+	}
+	
+	private double[] normalize(double[] arr)
+	{
+		double[] res = new double[arr.length];
+		for(int i = 0; i < arr.length; ++i)
+		{
+			res[i] = (arr[i] - minVal)/devVal;
+		}
+		return res;
+	}
+	
+	private double[] denormalize(double[] arr)
+	{
+		double[] res = new double[arr.length];
+		for(int i = 0; i < arr.length; ++i)
+		{
+			res[i] = arr[i] * devVal + minVal;
+		}
+		return res;
 	}
 }
