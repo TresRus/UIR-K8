@@ -4,9 +4,18 @@ import java.util.Random;
 
 public class Neuron {
 	private double[] weight;
+	private double b;
 	private int fun;
 	private static Random gen = new Random();
 	
+	public double getB() {
+		return b;
+	}
+
+	public void setB(double b) {
+		this.b = b;
+	}
+
 	public double[] getWeight() {
 		return weight;
 	}
@@ -21,8 +30,9 @@ public class Neuron {
 		weight = new double[numberOfInputs];
 		for(int i = 0; i < weight.length; ++i)
 		{
-			weight[i] = ((gen.nextDouble() * 1.0) - 0.5) * 0.7;
+			weight[i] = ((gen.nextDouble() * 1.0) - 0.5) * 1.3;
 		}
+		b = ((gen.nextDouble() * 1.0) - 0.5) * 1.3;
 	}
 	
 	public Neuron(int f, int numberOfInputs, double value)
@@ -33,6 +43,7 @@ public class Neuron {
 		{
 			weight[i] = value;
 		}
+		b = value;
 	}
 	
 	public double runNeuron(double[] input) throws Exception
@@ -44,7 +55,7 @@ public class Neuron {
 			{
 				funInput += input[i]*weight[i];
 			}
-			return applyFun(funInput);
+			return applyFun(funInput + b);
 		}
 		else
 		{
