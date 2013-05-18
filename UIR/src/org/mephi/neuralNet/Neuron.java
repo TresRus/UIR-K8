@@ -8,22 +8,43 @@ public class Neuron {
 	private int fun;
 	private static Random gen = new Random();
 	
+	/**
+	 * getter for additional input
+	 * @return additional input
+	 */
 	public double getB() {
 		return b;
 	}
 
+	/**
+	 * setter for additional input
+	 * @param b additional input
+	 */
 	public void setB(double b) {
 		this.b = b;
 	}
 
+	/**
+	 * getter for weights
+	 * @return weights
+	 */
 	public double[] getWeight() {
 		return weight;
 	}
 
+	/**
+	 * setter for weights
+	 * @param weight - weights of nueron
+	 */
 	public void setWeight(double[] weight) {
 		this.weight = weight;
 	}
 
+	/**
+	 * constructor with random weights
+	 * @param f - number of neuron function (1 - gaus, 2 - sigmoid, 3 - line)
+	 * @param numberOfInputs - number of neuron inputs
+	 */
 	public Neuron(int f, int numberOfInputs)
 	{
 		fun = f;
@@ -35,7 +56,13 @@ public class Neuron {
 		b = ((gen.nextDouble() * 1.0) - 0.5) * 1.3;
 	}
 	
-	public Neuron(int f, int numberOfInputs, double value)
+	/**
+	 * constructor with fixed weights
+	 * @param f - number of neuron function (1 - gaus, 2 - sigmoid, 3 - line)
+	 * @param numberOfInputs - number of neuron inputs
+	 * @param value - value of weights
+	 */
+	public Neuron(int f, int numberOfInputs, double value) 
 	{
 		fun = f;
 		weight = new double[numberOfInputs];
@@ -46,6 +73,12 @@ public class Neuron {
 		b = value;
 	}
 	
+	/**
+	 * Run a neuron
+	 * @param input - neuron input
+	 * @return result of neuron work
+	 * @throws Exception on wrong size of input array
+	 */
 	public double runNeuron(double[] input) throws Exception
 	{
 		if(input.length == weight.length)
@@ -63,6 +96,12 @@ public class Neuron {
 		}
 	}
 	
+	/**
+	 * Apply a neuron function
+	 * @param value - function argument
+	 * @return result of function from argument
+	 * @throws Exception at unknow function number
+	 */
 	private double applyFun(double value) throws Exception
 	{
 		double res = 0.0;
@@ -78,16 +117,31 @@ public class Neuron {
 		return res;
 	}
 	
+	/**
+	 * line function
+	 * @param value - function argument
+	 * @return esult of function from argument
+	 */
 	private double lineFun(double value)
 	{
 		return value;
 	}
 	
+	/**
+	 * sigmoid function
+	 * @param value - function argument
+	 * @return result of function from argument
+	 */
 	private double sigmFun(double value)
 	{
 		return (1/(1 + java.lang.Math.pow(java.lang.Math.E, -value)));
 	}
 	
+	/**
+	 * gaus function with m = 0, d = 1
+	 * @param value - function argument
+	 * @return result of function from argument
+	 */
 	private double gausFun(double value)
 	{
 		double m = 0.0;
