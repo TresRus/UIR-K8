@@ -100,15 +100,66 @@ public class NeuroNet {
 		return denormalize(res);
 	}
 	
-	public double[] trainNet(double[] in, double[] testArr, double n) throws Exception
+	//Train BE
+	
+	public double[] trainNetBE(double[] date, int iterat) throws Exception
 	{
-		if(testArr.length == layers[layers.length-1].getSize())
+		double n = 0.0000001;
+		double[] input;
+		double[] test;
+		double[] res = null;
+		int m = (date.length - numOfInputs - numOfOutputs + 1);
+		
+		for(int i = 0; i < iterat; ++i)
+		{
+			for(int j = 0; j < m; ++j)
+			{
+				input = getSubArr(j,numOfInputs,date);
+				test = getSubArr(j+numOfInputs,numOfOutputs,date);
+				res = trainBEStep(input, test, n);
+			}
+			/*
+			f1 = countNetFit(date);
+			if(f2 < f1)
+			{
+				n -= mn;
+				if (n <= 0)
+				{
+					n = an;
+					an /= 10;
+					mn /= 10;
+				}
+				if(n <= 0.00000000001)
+				{
+					n = 0.005;
+					an = 0.0001;
+					mn = 0.0005;
+				}
+			}
+			else
+			{
+				n += an;
+			}
+			f2 = f1;
+			*/
+			System.out.print("BE: ");
+			System.out.println(countNetFit(date));
+		}
+		System.out.print("BE: ");
+		System.out.println(countNetFit(date));
+		
+		return res;
+	}
+	
+	private double[] trainBEStep(double[] input, double[] testOut, double n) throws Exception
+	{
+		if(testOut.length == layers[layers.length-1].getSize())
 		{
 			List<double[]> outs = new ArrayList<double[]>();
 			List<double[]> deltas = new ArrayList<double[]>();
 			
 			double[] out;
-			double[] res = normalize(in);
+			double[] res = normalize(input);
 			for(Layer l : layers)
 			{
 				out = new double[l.getSize()];
@@ -122,7 +173,7 @@ public class NeuroNet {
 			
 			double[] delta;
 			double a;
-			double[] test = normalize(testArr);
+			double[] test = normalize(testOut);
 			
 			delta = new double[layers[layers.length-1].getSize()];
 			for(int i = 0; i < delta.length; ++i)
@@ -180,6 +231,8 @@ public class NeuroNet {
 		}
 	}
 	
+	//normalization
+	
 	private double[] normalize(double[] arr)
 	{
 		double[] res = new double[arr.length];
@@ -199,6 +252,8 @@ public class NeuroNet {
 		}
 		return res;
 	}
+	
+	//getter and setter of all weights
 	
 	public double[] getWeights()
 	{
@@ -242,6 +297,8 @@ public class NeuroNet {
 		}
 	}
 	
+	//additional method
+	
 	private static double[] getSubArr(int startIndex, int leng, double[] sourceArr)
 	{
 		double[] res = new double[leng];
@@ -254,33 +311,80 @@ public class NeuroNet {
 		return res;
 	}
 	
+	private static double[] replaceFromArray(int index, double[] sourceArr)
+	{
+		double[] res = new double[sourceArr.length - 1];
+		
+		for(int i = 0; i < res.length; ++i)
+		{
+			if(i < index)
+			{
+				res[i] = sourceArr[i];
+			}
+			else
+			{
+				res[i] = sourceArr[i + 1];
+			}
+		}
+		
+		return res;
+	}
+	
+	//Train GA
+	
 	public double[] trainNetGA(double[] date, int iterat) throws Exception
 	{
 		double[] res;
+		
 		double[] nw;
 		double nwf;
 		int maxFitIndex;
+		
 		int bestW;
 		
-		int pullSize = wSize/15;
-		pullSize = (pullSize+1) * 3;
+		int pullSize = wSize*2;
+		int minPullSize = wSize/10;
 		if(pullSize < 9)
 			pullSize = 9;
+		if(minPullSize < 5)
+			minPullSize = 5;
 		
-		List<double[]> pull = firstPull(pullSize);
-		double[] pullFit = countFit(pullSize, pull, date);
+		double delPerIter = (double) pullSize/ (((double) iterat) * 0.85);
+		double toDel = 0.0;
+		
+		List<double[]> pull = firstPull(date, pullSize);
+		double[] pullFit = countPullFit(pullSize, pull, date);
 		
 		for(int j = 0; j < iterat; ++j)
 		{
+			toDel += delPerIter;
+			
 			List<double[]> cross = crossingover(pull.get(secMinInArr(pullFit)),pull.get(minInArr(pullFit)));
 			//List<double[]> cross = crossingover(pull.get(gen.nextInt(pullSize)),pull.get(minInArr(pullFit)));
 			
+			/*
+			if( j == (int) (iterat * 0.9))
+			{
+				for(int i = 0; i < pullSize; ++i)
+				{
+					double[] w = pull.get(i);
+					setWeights(w);
+					System.out.printf("# %d : %d ", i, pullSize);
+					trainNetBE(date,20);
+					w = getWeights();
+					pull.remove(i);
+					pull.add(i, w);
+				}
+			}
+			*/
 			for(int i = 0; i < 3; ++i)
 			{
 				nw = cross.get(i);
 				nw = mutation(nw, 0.03);
 				setWeights(nw);
-				nwf = testNetGA(date);
+				nwf = countNetFit(date);
+				if(Double.isNaN(nwf))
+					break;
 				maxFitIndex = maxInArr(pullFit);
 				if(pullFit[maxFitIndex] > nwf)
 				{
@@ -290,7 +394,24 @@ public class NeuroNet {
 				}
 			}
 			
+			while(toDel > 1.0)
+			{
+				if(pullSize == minPullSize)
+				{
+					toDel = 0.0;
+				}
+				else
+				{
+					maxFitIndex = maxInArr(pullFit);
+					pull.remove(maxFitIndex);
+					pullFit = replaceFromArray(maxFitIndex,pullFit);
+					toDel -= 1.0;
+					pullSize -= 1;
+				}
+			}
+			
 			bestW = minInArr(pullFit);
+			System.out.print("GA: ");
 			System.out.println(pullFit[bestW]);
 		}
 		
@@ -344,7 +465,7 @@ public class NeuroNet {
 		return res;
 	}
 	
-	private double[] countFit(int pullSize, List<double[]> pull,double[] date) throws Exception
+	private double[] countPullFit(int pullSize, List<double[]> pull,double[] date) throws Exception
 	{
 		double[] pullFit = new double[pullSize];
 		double[] weight;
@@ -353,13 +474,13 @@ public class NeuroNet {
 		{
 			weight = pull.get(i);
 			setWeights(weight);
-			pullFit[i] = testNetGA(date);
+			pullFit[i] = countNetFit(date);
 		}
 		
 		return pullFit;
 	}
 	
-	private List<double[]> firstPull(int size)
+	private List<double[]> firstPull(double[] date, int size) throws Exception
 	{
 		List<double[]> pull = new ArrayList<double[]>();
 		pull.add(getWeights());
@@ -372,13 +493,14 @@ public class NeuroNet {
 			{
 				w[j] = ((gen.nextDouble() * 1.0) - 0.5) * 1.3;
 			}
+			
 			pull.add(w);
 		}
 		
 		return pull;
 	}
 	
-	private double testNetGA(double[] date) throws Exception
+	private double countNetFit(double[] date) throws Exception
 	{
 		double[] in;
 		double[] test;
