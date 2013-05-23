@@ -2,6 +2,13 @@ package org.mephi.addClasses;
 
 public class MyMath {
 	
+	/**
+	 * Get sub array form source array.
+	 * @param startIndex = first index of sub array
+	 * @param leng
+	 * @param sourceArr
+	 * @return
+	 */
 	public static double[] getSubArr(int startIndex, int leng, double[] sourceArr)
 	{
 		double[] res = new double[leng];
@@ -13,6 +20,7 @@ public class MyMath {
 		
 		return res;
 	}
+	
 	
 	public static double[] replaceFromArray(int index, double[] sourceArr)
 	{
