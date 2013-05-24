@@ -19,15 +19,19 @@ public class Predict {
 			Train tbe = new TrainBE(net);
 			//double[][] tIn = createInput();
 			//double[][] tOut = testRes(tIn);
-			double[] date = lineInput(300);
+			double[] data = lineInput(300);
 			double[] test = lineTest(300);
 			
-			//tga.trainNet(date);
-			//tbe.trainNet(date);
+			//tga.trainNet(data);
+			//tbe.trainNet(data);
 			
 			//net.testRun(test);
 			
 			dataIn = DataIO.readData("C:\\data.xls");
+			
+			data = dataIn.get(1);
+			
+			System.out.println("end");
 			
 		}
 		catch(Exception e)
