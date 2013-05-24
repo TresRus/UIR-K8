@@ -21,7 +21,6 @@ public class MyMath {
 		return res;
 	}
 	
-	
 	public static double[] replaceFromArray(int index, double[] sourceArr)
 	{
 		double[] res = new double[sourceArr.length - 1];
