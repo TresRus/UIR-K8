@@ -12,6 +12,8 @@ public class Predict {
 	
 	public static void main(String[] args) {
 		try{
+			List<double[]> dataIn;
+			List<double[]> dataOut;
 			NeuroNet net = new NeuroNet(0,300,new int[] {30,15,1}, new int[] {1,2,3},30);
 			Train tga = new TrainGA(net);
 			Train tbe = new TrainBE(net);
@@ -20,11 +22,12 @@ public class Predict {
 			double[] date = lineInput(300);
 			double[] test = lineTest(300);
 			
-			tga.trainNet(date);
+			//tga.trainNet(date);
 			//tbe.trainNet(date);
 			
-			net.testRun(test);
+			//net.testRun(test);
 			
+			dataIn = DataIO.readData("C:\\data.xls");
 			
 		}
 		catch(Exception e)
