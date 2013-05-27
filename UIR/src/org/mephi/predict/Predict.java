@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.mephi.addClasses.MyMath;
 import org.mephi.neuralNet.*;
 
 public class Predict {
@@ -14,22 +15,34 @@ public class Predict {
 		try{
 			List<double[]> dataIn;
 			List<double[]> dataOut;
-			NeuroNet net = new NeuroNet(0,300,new int[] {30,15,1}, new int[] {1,2,3},30);
-			Train tga = new TrainGA(net);
-			Train tbe = new TrainBE(net);
-			//double[][] tIn = createInput();
-			//double[][] tOut = testRes(tIn);
-			double[] data = lineInput(300);
-			double[] test = lineTest(300);
+			NeuroNet net;
+			Train tga;
+			double[] data;
+			double[] test;
 			
 			//tga.trainNet(data);
 			//tbe.trainNet(data);
 			
 			//net.testRun(test);
 			
-			dataIn = DataIO.readData("C:\\data.xls");
+			dataIn = DataIO.readData("E:\\data.xls");
 			
-			data = dataIn.get(1);
+			test = dataIn.get(0);
+			data = MyMath.getSubArr(0, test.length - 7, test);
+			
+			System.out.println("get data");
+			
+			net = new NeuroNet(0,MyMath.getMaxInArr(test) * 1.3 ,new int[] {30,15,1}, new int[] {1,2,3},30);
+			tga = new TrainGA(net);
+			
+			System.out.println("train...");
+			
+			tga.trainNet(data);
+			tga.addTrainNet(data);
+			
+			System.out.println("train end");
+			
+			net.testRun(test);
 			
 			System.out.println("end");
 			

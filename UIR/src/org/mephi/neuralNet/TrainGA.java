@@ -14,17 +14,25 @@ public class TrainGA implements Train {
 	}
 
 	@Override
-	public void trainNet(double[] date) throws Exception {
-		trainFirstStep(date);
+	public void trainNet(double[] data) throws Exception {
+		trainFirstStep(data);
 		
-		System.out.printf("GA 0: %f\n", net.countNetFit(date));
+		System.out.printf("GA 0: %f\n", net.countNetFit(data));
 		for(int i = 1; i <= 15; ++i) {
-			trainStep(date,i);
-			System.out.printf("GA %d: %f\n", i, net.countNetFit(date));
+			trainStep(data,i);
+			System.out.printf("GA %d: %f\n", i, net.countNetFit(data));
 		}
 	}
 	
-	private void trainFirstStep(double[] date) throws Exception {
+	@Override
+	public void addTrainNet(double[] data) throws Exception {
+		for(int i = 10; i <= 20; ++i) {
+			trainStep(data,i);
+			System.out.printf("GA %d: %f\n", i, net.countNetFit(data));
+		}
+	}
+
+	private void trainFirstStep(double[] data) throws Exception {
 		int index;
 		int iterat = net.getwSize();
 		
@@ -38,8 +46,8 @@ public class TrainGA implements Train {
 		double delPerIter = (double) pullSize/ (((double) iterat) * 0.7);
 		double toDel = 0.0;
 		
-		List<double[]> pull = firstPull(date, pullSize);
-		double[] pullFit = countPullFit(pullSize, pull, date);
+		List<double[]> pull = firstPull(data, pullSize);
+		double[] pullFit = countPullFit(pullSize, pull, data);
 		
 		for(int j = 0; j < iterat; ++j)
 		{
@@ -48,7 +56,7 @@ public class TrainGA implements Train {
 			//List<double[]> cross = crossingover(pull.get(MyMath.secMinInArr(pullFit)),pull.get(MyMath.minInArr(pullFit)));
 			List<double[]> cross = crossingover(pull.get(gen.nextInt(pullSize)),pull.get(MyMath.minInArr(pullFit)));
 			
-			step(cross, pull, pullFit, date, 1);
+			step(cross, pull, pullFit, data, 1);
 			
 			while(toDel > 1.0)
 			{
@@ -73,7 +81,7 @@ public class TrainGA implements Train {
 		//net.setWeights(pull.get(index));
 	}
 	
-	private void trainStep(double[] date, int lv) throws Exception {
+	private void trainStep(double[] data, int lv) throws Exception {
 		int index;
 		int iterat = (int) (net.getwSize()/(2*Math.pow(lv, 0.7)));
 		
@@ -87,8 +95,8 @@ public class TrainGA implements Train {
 		double delPerIter = (double) pullSize/ (((double) iterat) * 0.7);
 		double toDel = 0.0;
 		
-		List<double[]> pull = nextPull(date, pullSize, lv);
-		double[] pullFit = countPullFit(pullSize, pull, date);
+		List<double[]> pull = nextPull(data, pullSize, lv);
+		double[] pullFit = countPullFit(pullSize, pull, data);
 		
 		for(int j = 0; j < iterat; ++j)
 		{
@@ -97,7 +105,7 @@ public class TrainGA implements Train {
 			//List<double[]> cross = crossingover(pull.get(MyMath.secMinInArr(pullFit)),pull.get(MyMath.minInArr(pullFit)));
 			List<double[]> cross = crossingover(pull.get(gen.nextInt(pullSize)),pull.get(MyMath.minInArr(pullFit)));
 			
-			step(cross, pull, pullFit, date, lv);
+			step(cross, pull, pullFit, data, lv);
 			
 			while(toDel > 1.0)
 			{
@@ -121,7 +129,7 @@ public class TrainGA implements Train {
 		//net.setWeights(pull.get(index));
 	}
 	
-	private void step(List<double[]> cross, List<double[]> pull, double[] pullFit, double[] date, int lv) throws Exception {
+	private void step(List<double[]> cross, List<double[]> pull, double[] pullFit, double[] data, int lv) throws Exception {
 		double[] nw;
 		double nwf;
 		int maxFitIndex;
@@ -133,7 +141,7 @@ public class TrainGA implements Train {
 			nw = cross.get(i);
 			nw = mutation(nw, 0.03 * mltp, lv);
 			net.setWeights(nw);
-			nwf = net.countNetFit(date);
+			nwf = net.countNetFit(data);
 			if(Double.isNaN(nwf))
 				break;
 			maxFitIndex = MyMath.maxInArr(pullFit);
@@ -187,7 +195,7 @@ public class TrainGA implements Train {
 		return res;
 	}
 	
-	private double[] countPullFit(int pullSize, List<double[]> pull,double[] date) throws Exception
+	private double[] countPullFit(int pullSize, List<double[]> pull,double[] data) throws Exception
 	{
 		double[] pullFit = new double[pullSize];
 		double[] weight;
@@ -196,13 +204,13 @@ public class TrainGA implements Train {
 		{
 			weight = pull.get(i);
 			net.setWeights(weight);
-			pullFit[i] = net.countNetFit(date);
+			pullFit[i] = net.countNetFit(data);
 		}
 		
 		return pullFit;
 	}
 	
-	private List<double[]> firstPull(double[] date, int size) throws Exception
+	private List<double[]> firstPull(double[] data, int size) throws Exception
 	{
 		List<double[]> pull = new ArrayList<double[]>();
 		pull.add(net.getWeights());
@@ -222,7 +230,7 @@ public class TrainGA implements Train {
 		return pull;
 	}
 	
-	private List<double[]> nextPull(double[] date, int size, int lv) throws Exception
+	private List<double[]> nextPull(double[] data, int size, int lv) throws Exception
 	{
 		List<double[]> pull = new ArrayList<double[]>();
 		

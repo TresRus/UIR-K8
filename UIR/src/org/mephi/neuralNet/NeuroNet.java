@@ -1,5 +1,7 @@
 package org.mephi.neuralNet;
 
+import java.util.List;
+
 import org.mephi.addClasses.MyMath;
 
 public class NeuroNet {
@@ -106,6 +108,35 @@ public class NeuroNet {
 			res = l.runLayer(res);
 		}
 		return denormalize(res);
+	}
+	
+	public double[] predictRun(double[] input, int len) throws Exception
+	{
+		if(numOfOutputs == 1)
+		{
+			if(numOfInputs == input.length)
+			{
+				double[] in = input;
+				double out;
+				double[] res = new double[len];
+				for(int i = 0; i < len; ++i)
+				{
+					out = runNet(in)[0];
+					res[i] = out;
+					in = MyMath.getSubArr(1, in.length-1, in);
+					in = MyMath.appendToArr(in, out);
+				}
+				return res;
+			}
+			else
+			{
+				throw new Exception("Input length not enough.");
+			}
+		}
+		else
+		{
+			throw new Exception("Net not accessable for predict.");
+		}
 	}
 	
 	//normalization

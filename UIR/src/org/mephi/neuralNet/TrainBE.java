@@ -12,23 +12,44 @@ public class TrainBE implements Train {
 	}
 	
 	@Override
-	public void trainNet(double[] date) throws Exception {
+	public void trainNet(double[] data) throws Exception {
 		double n = 0.0000001;
 		int iterat = net.getwSize();
 		
 		double[] input;
 		double[] test;
-		int m = (date.length - net.getNumOfInputs() - net.getNumOfOutputs() + 1);
+		int m = (data.length - net.getNumOfInputs() - net.getNumOfOutputs() + 1);
 		
 		for(int i = 0; i < iterat; ++i)
 		{
 			for(int j = 0; j < m; ++j)
 			{
-				input = MyMath.getSubArr(j,net.getNumOfInputs(),date);
-				test = MyMath.getSubArr(j+net.getNumOfInputs(),net.getNumOfOutputs(),date);
+				input = MyMath.getSubArr(j,net.getNumOfInputs(),data);
+				test = MyMath.getSubArr(j+net.getNumOfInputs(),net.getNumOfOutputs(),data);
 				trainStep(input, test, n);
 			}
-			System.out.printf("BE: %f\n", net.countNetFit(date));
+			System.out.printf("BE: %f\n", net.countNetFit(data));
+		}
+	}
+
+	@Override
+	public void addTrainNet(double[] data) throws Exception {
+		double n = 0.0000001;
+		int iterat = net.getwSize()/20;
+		
+		double[] input;
+		double[] test;
+		int m = (data.length - net.getNumOfInputs() - net.getNumOfOutputs() + 1);
+		
+		for(int i = 0; i < iterat; ++i)
+		{
+			for(int j = 0; j < m; ++j)
+			{
+				input = MyMath.getSubArr(j,net.getNumOfInputs(),data);
+				test = MyMath.getSubArr(j+net.getNumOfInputs(),net.getNumOfOutputs(),data);
+				trainStep(input, test, n);
+			}
+			System.out.printf("BE: %f\n", net.countNetFit(data));
 		}
 	}
 

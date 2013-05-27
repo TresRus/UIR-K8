@@ -40,6 +40,17 @@ public class MyMath {
 		return res;
 	}
 	
+	public static double[] appendToArr(double[] arr, double val)
+	{
+		double[] res = new double[arr.length+1];
+		for(int i = 0; i< arr.length; ++i)
+		{
+			res[i] = arr[i];
+		}
+		res[arr.length] = val;
+		return res;
+	}
+	
 	public static double countDev(double[] arr1,double[] arr2) throws Exception
 	{
 		if(arr1.length == arr2.length)
@@ -90,6 +101,21 @@ public class MyMath {
 		}
 		
 		return n;
+	}
+	
+	public static double getMaxInArr(double[] arr)
+	{
+		double max = arr[0];
+		
+		for(int i = 0; i < arr.length; ++i)
+		{
+			if(max < arr[i])
+			{
+				max = arr[i];
+			}
+		}
+		
+		return max;
 	}
 	
 	public static int secMinInArr(double[] arr)

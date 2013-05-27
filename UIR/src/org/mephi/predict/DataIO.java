@@ -46,6 +46,7 @@ public class DataIO {
 				ad = new ArrayList<Double>();
 				ad.add(summ);
 			}
+			prevATMnum = ATMcell.getNumericCellValue();
 		}
 		
 		atmdata = new double[ad.size()];
@@ -53,6 +54,8 @@ public class DataIO {
 			atmdata[i] = ad.get(i).doubleValue();
 		}
 		res.add(atmdata);
+		
+		res.remove(0);
 		
 		return res;
 	}
