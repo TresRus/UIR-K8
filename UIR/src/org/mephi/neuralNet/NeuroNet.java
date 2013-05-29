@@ -238,7 +238,7 @@ public class NeuroNet {
 			out = runNet(in);
 			for (int j = 0; j < out.length; ++j)
 			{
-				System.out.printf("out: %f test: %f err in pr : %f \n",out[j],test[j],Math.abs((out[j]-test[j])/test[j]));
+				System.out.printf("out: %10.4f test: %10.4f err in pr : %3.4f \n",out[j],test[j],Math.abs((out[j]-test[j])/test[j]));
 			}
 		}
 	}

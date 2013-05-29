@@ -18,15 +18,18 @@ public class TrainGA implements Train {
 		trainFirstStep(data);
 		
 		System.out.printf("GA 0: %f\n", net.countNetFit(data));
-		for(int i = 1; i <= 15; ++i) {
-			trainStep(data,i);
-			System.out.printf("GA %d: %f\n", i, net.countNetFit(data));
+		for(int j = 0; j <= data.length-100; ++j) {
+			double[] in = MyMath.getSubArr(j, 100, data);
+			for(int i = 1; i <= 20; ++i) {
+				trainStep(in,i);
+				System.out.printf("GA %d.%d: %f\n", j, i, net.countNetFit(in));
+			}
 		}
 	}
 	
 	@Override
 	public void addTrainNet(double[] data) throws Exception {
-		for(int i = 10; i <= 20; ++i) {
+		for(int i = 5; i <= 50; ++i) {
 			trainStep(data,i);
 			System.out.printf("GA %d: %f\n", i, net.countNetFit(data));
 		}
@@ -34,10 +37,10 @@ public class TrainGA implements Train {
 
 	private void trainFirstStep(double[] data) throws Exception {
 		int index;
-		int iterat = net.getwSize();
+		int iterat = net.getwSize()*3;
 		
-		int pullSize = net.getwSize()/2;
-		int minPullSize = net.getwSize()/6;
+		int pullSize = net.getwSize()*2;
+		int minPullSize = net.getwSize()/3;
 		if(pullSize < 9)
 			pullSize = 9;
 		if(minPullSize < 5)
@@ -83,9 +86,9 @@ public class TrainGA implements Train {
 	
 	private void trainStep(double[] data, int lv) throws Exception {
 		int index;
-		int iterat = (int) (net.getwSize()/(2*Math.pow(lv, 0.7)));
+		int iterat = (int) (net.getwSize()/(Math.pow(lv, 0.7)));
 		
-		int pullSize = net.getwSize()/(2*lv);
+		int pullSize = net.getwSize()/(lv);
 		int minPullSize = net.getwSize()/(6*lv);
 		if(pullSize < 9)
 			pullSize = 9;
