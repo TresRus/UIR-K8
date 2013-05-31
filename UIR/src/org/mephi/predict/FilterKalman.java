@@ -12,30 +12,26 @@ public class FilterKalman {
     private double State;
     private double Covariance;
 
-    public FilterKalman(double q, double r)
-    {
+    public FilterKalman(double q, double r) {
         Q = q;
         R = r;
         F = 1;
         H = 1;
     }
     
-    public FilterKalman(double q, double r, double f, double h)
-    {
+    public FilterKalman(double q, double r, double f, double h) {
         Q = q;
         R = r;
         F = f;
         H = h;
     }
 
-    public void SetState(double state, double covariance)
-    {
+    public void setState(double state, double covariance) {
         State = state;
         Covariance = covariance;
     }
 
-    public double Correct(double data)
-    {
+    public double correct(double data) {
         //time update - prediction
         X0 = F*State;
         P0 = F*Covariance*F + Q;
@@ -47,14 +43,12 @@ public class FilterKalman {
         return State;
     }
     
-    public double[] filter(double[] data)
-    {
+    public double[] runFilter(double[] data) {
     	double[] res = new double[data.length];
     	
-    	SetState(data[0], 0.1);
-    	for(int i = 0; i < data.length; ++i)
-    	{
-    		res[i] = Correct(data[i]);
+    	setState((data[0] + data[1] + data[2])/3, 0.05);
+    	for(int i = 0; i < data.length; ++i) {
+    		res[i] = correct(data[i]);
     	}
     	
     	return res;

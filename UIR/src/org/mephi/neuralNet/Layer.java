@@ -1,11 +1,16 @@
 package org.mephi.neuralNet;
 
 public class Layer {
+	/**
+	 * @uml.property  name="neurons"
+	 * @uml.associationEnd  multiplicity="(0 -1)"
+	 */
 	private Neuron[] neurons;
 
 	/**
 	 * get neurons of layer
-	 * @return array of neurons
+	 * @return  array of neurons
+	 * @uml.property  name="neurons"
 	 */
 	public Neuron[] getNeurons() {
 		return neurons;
@@ -25,11 +30,9 @@ public class Layer {
 	 * @param numberOfInputs - number of neurons inputs
 	 * @param numberOfOutputs - number of neurons in layer
 	 */
-	public Layer(int f, int numberOfInputs, int numberOfOutputs)
-	{
+	public Layer(int f, int numberOfInputs, int numberOfOutputs) {
 		neurons = new Neuron[numberOfOutputs];
-		for(int i = 0; i < neurons.length; ++i)
-		{
+		for(int i = 0; i < neurons.length; ++i) {
 			neurons[i] = new Neuron(f,numberOfInputs);
 		}
 	}
@@ -41,11 +44,9 @@ public class Layer {
 	 * @param numberOfOutputs - number of neurons in layer
 	 * @param weightVal - value of weights
 	 */
-	public Layer(int f, int numberOfInputs, int numberOfOutputs, double weightVal)
-	{
+	public Layer(int f, int numberOfInputs, int numberOfOutputs, double weightVal) {
 		neurons = new Neuron[numberOfOutputs];
-		for(int i = 0; i < neurons.length; ++i)
-		{
+		for(int i = 0; i < neurons.length; ++i) {
 			neurons[i] = new Neuron(f,numberOfInputs, weightVal);
 		}
 	}
@@ -56,18 +57,14 @@ public class Layer {
 	 * @return array of results of neurons work
 	 * @throws Exception on wrong size of input array
 	 */
-	public double[] runLayer(double[] input) throws Exception
-	{
-		try{
+	public double[] runLayer(double[] input) throws Exception {
+		try {
 			double[] res = new double[neurons.length];
-			for(int i = 0; i < neurons.length; ++i)
-			{
+			for(int i = 0; i < neurons.length; ++i) {
 				res[i] = neurons[i].runNeuron(input);
 			}
 			return res;
-		}
-		catch(Exception e)
-		{
+		} catch(Exception e) {
 			throw e;
 		}	
 	}

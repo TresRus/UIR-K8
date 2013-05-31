@@ -3,14 +3,24 @@ package org.mephi.neuralNet;
 import java.util.Random;
 
 public class Neuron {
+	/**
+	 * @uml.property  name="weight"
+	 */
 	private double[] weight;
+	/**
+	 * @uml.property  name="b"
+	 */
 	private double b;
+	/**
+	 * @uml.property  name="fun"
+	 */
 	private int fun;
 	private static Random gen = new Random();
 	
 	/**
 	 * getter for additional input
-	 * @return additional input
+	 * @return  additional input
+	 * @uml.property  name="b"
 	 */
 	public double getB() {
 		return b;
@@ -18,7 +28,8 @@ public class Neuron {
 
 	/**
 	 * setter for additional input
-	 * @param b additional input
+	 * @param b  additional input
+	 * @uml.property  name="b"
 	 */
 	public void setB(double b) {
 		this.b = b;
@@ -26,7 +37,8 @@ public class Neuron {
 
 	/**
 	 * getter for weights
-	 * @return weights
+	 * @return  weights
+	 * @uml.property  name="weight"
 	 */
 	public double[] getWeight() {
 		return weight;
@@ -34,7 +46,8 @@ public class Neuron {
 
 	/**
 	 * setter for weights
-	 * @param weight - weights of nueron
+	 * @param weight  - weights of nueron
+	 * @uml.property  name="weight"
 	 */
 	public void setWeight(double[] weight) {
 		this.weight = weight;
@@ -45,12 +58,10 @@ public class Neuron {
 	 * @param f - number of neuron function (1 - gaus, 2 - sigmoid, 3 - line)
 	 * @param numberOfInputs - number of neuron inputs
 	 */
-	public Neuron(int f, int numberOfInputs)
-	{
+	public Neuron(int f, int numberOfInputs) {
 		fun = f;
 		weight = new double[numberOfInputs];
-		for(int i = 0; i < weight.length; ++i)
-		{
+		for(int i = 0; i < weight.length; ++i) {
 			weight[i] = ((gen.nextDouble() * 1.0) - 0.5) * 1.3;
 		}
 		b = ((gen.nextDouble() * 1.0) - 0.5) * 1.3;
@@ -62,12 +73,10 @@ public class Neuron {
 	 * @param numberOfInputs - number of neuron inputs
 	 * @param value - value of weights
 	 */
-	public Neuron(int f, int numberOfInputs, double value) 
-	{
+	public Neuron(int f, int numberOfInputs, double value) {
 		fun = f;
 		weight = new double[numberOfInputs];
-		for(int i = 0; i < weight.length; ++i)
-		{
+		for(int i = 0; i < weight.length; ++i) {
 			weight[i] = value;
 		}
 		b = value;
@@ -79,19 +88,14 @@ public class Neuron {
 	 * @return result of neuron work
 	 * @throws Exception on wrong size of input array
 	 */
-	public double runNeuron(double[] input) throws Exception
-	{
-		if(input.length == weight.length)
-		{
+	public double runNeuron(double[] input) throws Exception {
+		if(input.length == weight.length) {
 			double funInput = 0.0;
-			for(int i = 0; i < weight.length; ++i)
-			{
+			for(int i = 0; i < weight.length; ++i) {
 				funInput += input[i]*weight[i];
 			}
 			return applyFun(funInput + b);
-		}
-		else
-		{
+		} else {
 			throw new Exception("Wrong input size.");
 		}
 	}
@@ -102,8 +106,7 @@ public class Neuron {
 	 * @return result of function from argument
 	 * @throws Exception at unknow function number
 	 */
-	private double applyFun(double value) throws Exception
-	{
+	private double applyFun(double value) throws Exception {
 		double res = 0.0;
 		switch (fun) {
 		case 1: res = gausFun(value);
@@ -122,8 +125,7 @@ public class Neuron {
 	 * @param value - function argument
 	 * @return esult of function from argument
 	 */
-	private double lineFun(double value)
-	{
+	private double lineFun(double value) {
 		return value;
 	}
 	
@@ -132,8 +134,7 @@ public class Neuron {
 	 * @param value - function argument
 	 * @return result of function from argument
 	 */
-	private double sigmFun(double value)
-	{
+	private double sigmFun(double value) {
 		return (1/(1 + java.lang.Math.pow(java.lang.Math.E, -value)));
 	}
 	
@@ -142,8 +143,7 @@ public class Neuron {
 	 * @param value - function argument
 	 * @return result of function from argument
 	 */
-	private double gausFun(double value)
-	{
+	private double gausFun(double value) {
 		double m = 0.0;
 		double d = 1.0;
 		double res = 0.0;

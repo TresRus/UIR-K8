@@ -5,6 +5,10 @@ import java.util.List;
 import org.mephi.addClasses.MyMath;
 
 public class TrainBE implements Train {
+	/**
+	 * @uml.property  name="net"
+	 * @uml.associationEnd  
+	 */
 	private NeuroNet net;
 	
 	public TrainBE(NeuroNet nnet) {
@@ -20,10 +24,8 @@ public class TrainBE implements Train {
 		double[] test;
 		int m = (data.length - net.getNumOfInputs() - net.getNumOfOutputs() + 1);
 		
-		for(int i = 0; i < iterat; ++i)
-		{
-			for(int j = 0; j < m; ++j)
-			{
+		for(int i = 0; i < iterat; ++i) {
+			for(int j = 0; j < m; ++j) {
 				input = MyMath.getSubArr(j,net.getNumOfInputs(),data);
 				test = MyMath.getSubArr(j+net.getNumOfInputs(),net.getNumOfOutputs(),data);
 				trainStep(input, test, n);
@@ -41,10 +43,8 @@ public class TrainBE implements Train {
 		double[] test;
 		int m = (data.length - net.getNumOfInputs() - net.getNumOfOutputs() + 1);
 		
-		for(int i = 0; i < iterat; ++i)
-		{
-			for(int j = 0; j < m; ++j)
-			{
+		for(int i = 0; i < iterat; ++i) {
+			for(int j = 0; j < m; ++j) {
 				input = MyMath.getSubArr(j,net.getNumOfInputs(),data);
 				test = MyMath.getSubArr(j+net.getNumOfInputs(),net.getNumOfOutputs(),data);
 				trainStep(input, test, n);
@@ -53,21 +53,17 @@ public class TrainBE implements Train {
 		}
 	}
 
-	private void trainStep(double[] input, double[] testOut, double n) throws Exception
-	{
-		if(testOut.length == net.getLayers()[net.getLayers().length-1].getSize())
-		{
+	private void trainStep(double[] input, double[] testOut, double n) throws Exception {
+		if(testOut.length == net.getLayers()[net.getLayers().length-1].getSize()) {
 			List<double[]> outs = new ArrayList<double[]>();
 			List<double[]> deltas = new ArrayList<double[]>();
 			
 			double[] out;
 			double[] res = net.normalize(input);
-			for(Layer l : net.getLayers())
-			{
+			for(Layer l : net.getLayers()) {
 				out = new double[l.getSize()];
 				res = l.runLayer(res);
-				for(int i = 0; i < out.length; ++i)
-				{
+				for(int i = 0; i < out.length; ++i) {
 					out[i] = res[i];
 				}
 				outs.add(out);
@@ -78,24 +74,20 @@ public class TrainBE implements Train {
 			double[] test = net.normalize(testOut);
 			
 			delta = new double[net.getLayers()[net.getLayers().length-1].getSize()];
-			for(int i = 0; i < delta.length; ++i)
-			{
+			for(int i = 0; i < delta.length; ++i) {
 				a = outs.get(net.getLayers().length-1)[i];
 				delta[i] = a*(1-a)*(test[i] - a);
 			}
 			deltas.add(delta);
 			
 			double[] prevDelta;
-			for(int i = net.getLayers().length-2; i >= 0; --i)
-			{
+			for(int i = net.getLayers().length-2; i >= 0; --i) {
 				prevDelta = delta;
 				delta = new double[net.getLayers()[i].getSize()];
 				double sum;
-				for(int j = 0; j < net.getLayers()[i].getSize();++j)
-				{
+				for(int j = 0; j < net.getLayers()[i].getSize();++j) {
 					sum = 0.0;
-					for(int k = 0; k < net.getLayers()[i+1].getSize(); ++k)
-					{
+					for(int k = 0; k < net.getLayers()[i+1].getSize(); ++k) {
 						sum += prevDelta[k] * net.getLayers()[i+1].getNeurons()[k].getWeight()[j];
 					}
 					a = outs.get(i)[j];
@@ -104,28 +96,22 @@ public class TrainBE implements Train {
 				deltas.add(delta);
 			}
 			
-			for(int i = 0; i < net.getLayers().length; ++i)
-			{
+			for(int i = 0; i < net.getLayers().length; ++i) {
 				countNewWeight(net.getLayers()[net.getLayers().length-1-i],deltas.get(i),outs.get(net.getLayers().length-1-i),n);
 			}
 			
-		}
-		else
-		{
+		} else {
 			throw new Exception("Wrong test array size");
 		}
 	}
 	
-	private void countNewWeight(Layer l, double[] delta, double[] out, double n)
-	{
+	private void countNewWeight(Layer l, double[] delta, double[] out, double n) {
 		double dw;
 		double[] w;
-		for(int i = 0; i < l.getSize(); ++i)
-		{
+		for(int i = 0; i < l.getSize(); ++i) {
 			w = l.getNeurons()[i].getWeight();
 			dw = n * delta[i] * out[i];
-			for(int j = 0; j < w.length; ++j)
-			{
+			for(int j = 0; j < w.length; ++j) {
 				w[j] = w[j] + dw;
 			}
 			l.getNeurons()[i].setWeight(w);
