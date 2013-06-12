@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" size="1601,611" id="org.mephi.predict" metadata="uml2-1.0" initialized="true" tag="10" key="32303037303533312D313020554952">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0" name="DataIO" location="50,50" size="147,283" id="org.mephi.predict/DataIO" runTimeClassModel="writeDate(Ljava.lang.String;),getName(I),readData(Ljava.lang.String;),dataList,DataIO(),delta1,delta2,filtred1,delta3,filtred3,filtred2,writeTestRun(Ljava.lang.String;I),filtred4">
+    <children xsi:type="editmodel:CompartmentEditModel" size="124,144">
+      <children xsi:type="editmodel:AttributeEditModel" name="dataList" id="org.mephi.predict/DataIO#dataList"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="delta1" id="org.mephi.predict/DataIO#delta1"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="delta2" id="org.mephi.predict/DataIO#delta2"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="delta3" id="org.mephi.predict/DataIO#delta3"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="filtred1" id="org.mephi.predict/DataIO#filtred1"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="filtred2" id="org.mephi.predict/DataIO#filtred2"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="filtred3" id="org.mephi.predict/DataIO#filtred3"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="filtred4" id="org.mephi.predict/DataIO#filtred4"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="94,90">
+      <children xsi:type="editmodel:MethodEditModel" name="DataIO" id="org.mephi.predict/DataIO#DataIO()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="org.mephi.predict/DataIO#getName(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readData" id="org.mephi.predict/DataIO#readData(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeDate" id="org.mephi.predict/DataIO#writeDate(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="writeTestRun" id="org.mephi.predict/DataIO#writeTestRun(Ljava.lang.String;I)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="org.mephi.predict/DataIO->org.mephi.predict/FilterKalman*org.mephi.predict/DataIO->org.mephi.predict/FilterKalman*org.mephi.predict/DataIO-Soyatec::Import->org.mephi.predict/FilterKalman" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="41,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="147,68" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,88"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="org.mephi.predict/DataIO->org.mephi.addClasses/MyMath" source="//@children.0" target="//@children.3" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" size="0,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="147,161" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,121"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0" name="FilterKalman" location="270,30" size="124,157" id="org.mephi.predict/FilterKalman" runTimeClassModel="FilterKalman(DD),runFilter([D),setState(DD),state,correct(D),FilterKalman(DDDD)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="82,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="state" id="org.mephi.predict/FilterKalman#state"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="88,90">
+      <children xsi:type="editmodel:MethodEditModel" name="FilterKalman" id="org.mephi.predict/FilterKalman#FilterKalman(DDDD)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="FilterKalman" id="org.mephi.predict/FilterKalman#FilterKalman(DD)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="correct" id="org.mephi.predict/FilterKalman#correct(D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="runFilter" id="org.mephi.predict/FilterKalman#runFilter([D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setState" id="org.mephi.predict/FilterKalman#setState(DD)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Predict" location="288,266" size="87,67" id="org.mephi.predict/Predict" runTimeClassModel="main([Ljava.lang.String;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="52,18">
+      <children xsi:type="editmodel:MethodEditModel" name="main" id="org.mephi.predict/Predict#main([Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="org.mephi.predict/Predict->org.mephi.predict/DataIO*org.mephi.predict/Predict-Soyatec::Access->org.mephi.predict/DataIO*org.mephi.predict/Predict->org.mephi.predict/DataIO*org.mephi.predict/Predict-Soyatec::Import->org.mephi.predict/DataIO" source="//@children.2" target="//@children.0" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import, Access»" size="84,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,33" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="147,249"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.1" name="MyMath" location="435,90" size="141,243" id="org.mephi.addClasses/MyMath" runTimeClassModel="secMinInArr([D),maxInArr([D),appendToArr([DD),countDev([D[D),replaceFromArray(I[D),balanceData([DDD),getMaxInArr([D),minInArr([D),getMinInArr([D),getSubArr(II[D)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="118,180">
+      <children xsi:type="editmodel:MethodEditModel" name="appendToArr" id="org.mephi.addClasses/MyMath#appendToArr([DD)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="balanceData" id="org.mephi.addClasses/MyMath#balanceData([DDD)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="countDev" id="org.mephi.addClasses/MyMath#countDev([D[D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMaxInArr" id="org.mephi.addClasses/MyMath#getMaxInArr([D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getMinInArr" id="org.mephi.addClasses/MyMath#getMinInArr([D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSubArr" id="org.mephi.addClasses/MyMath#getSubArr(II[D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="maxInArr" id="org.mephi.addClasses/MyMath#maxInArr([D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="minInArr" id="org.mephi.addClasses/MyMath#minInArr([D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="replaceFromArray" id="org.mephi.addClasses/MyMath#replaceFromArray(I[D)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="secMinInArr" id="org.mephi.addClasses/MyMath#secMinInArr([D)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=1;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

@@ -19,15 +19,37 @@ public class TrainGA implements Train {
 
 	@Override
 	public void trainNet(double[] data) throws Exception {
-		int ln = (int) (data.length / 50);
-		int len = ln * 50;
+		int len = 7;
+		if(data.length > 200) {
+			len = 150;
+		} else if (data.length > 100) {
+			len = 70;
+		} else if (data.length < 8) {
+			len = data.length;
+		}
 		
+		trainStep(data,0);
+		
+		for(int i = 1; i <= 30; ++i) {
+			for(int j = 0; j <= data.length - len; ++j) {
+				double[] in = MyMath.getSubArr(j, len, data);
+				trainStep(in,i);
+				System.out.printf("GA %d.%d: %f\n", i, j, net.countNetFit(in));
+			}
+		}
+		/*
 		for(int j = 0; j <= data.length - len; ++j) {
 			double[] in = MyMath.getSubArr(j, len, data);
-			for(int i = 0; i <= 20; ++i) {
+			for(int i = 1; i <= 30; ++i) {
 				trainStep(in,i);
 				System.out.printf("GA %d.%d: %f\n", j, i, net.countNetFit(in));
 			}
+		}
+		*/
+		
+		for(int i = 5; i <= 100; ++i) {
+			trainStep(data,i);
+			System.out.printf("GA %d: %f\n", i, net.countNetFit(data));
 		}
 		
 		net.saveWeight(net.configFile);
@@ -36,7 +58,7 @@ public class TrainGA implements Train {
 	
 	@Override
 	public void addTrainNet(double[] data) throws Exception {
-		for(int i = 5; i <= 50; ++i) {
+		for(int i = 20; i <= 100; ++i) {
 			trainStep(data,i);
 			System.out.printf("GA %d: %f\n", i, net.countNetFit(data));
 		}
@@ -48,6 +70,9 @@ public class TrainGA implements Train {
 	private void trainStep(double[] data, int lv) throws Exception {
 		int index;
 		double dev = Math.pow(lv, 0.7) + 1;
+		
+		dev *= net.getwSize() / 200;
+		
 		int iterat = (int) (net.getwSize()/dev);
 		
 		int pullSize = (int)(net.getwSize()/(dev));

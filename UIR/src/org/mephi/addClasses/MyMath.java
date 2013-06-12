@@ -159,4 +159,12 @@ public class MyMath {
 		
 		return res;
 	}
+	
+	public static double[] minusArr(double[] a1, double[] a2) {
+		double[] res = new double[a1.length];
+		for(int i = 0; i < a1.length; ++i) {
+			res[i] = a1[i] - a2[i];
+		}
+		return res;
+	}
 }

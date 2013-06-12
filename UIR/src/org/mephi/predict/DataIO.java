@@ -99,7 +99,7 @@ public class DataIO {
 			prevATMnum = ATMcell.getNumericCellValue();
 		}
 		
-		processLists(ad,dt,prevATMnum);
+		processListsBack(ad,dt,prevATMnum);
 		
 		file.close();
 	}
@@ -135,54 +135,103 @@ public class DataIO {
 			dateVal.add(date);
 			
 			balanc1 = MyMath.balanceData(atmdata,0.7,0.8);
-			
 			maxValue = MyMath.getMaxInArr(atmdata) * 1.3;
-			
 			filter = new FilterKalman(maxValue * 0.0007, maxValue * 0.40);
 			filter1 = filter.runFilter(balanc1);
 			filter1 = MyMath.balanceData(filter1,0.5,0.3);
 			filtred1.add(filter1);
-			
-			d1 = new double[filter1.length];
-			
-			for(int i = 0; i < filter1.length; ++i) {
-				d1[i] = atmdata[i] - filter1[i];
-			}
+
+			d1 = MyMath.minusArr(atmdata, filter1);
 			delta1.add(d1);
 			
 			balanc2 = MyMath.balanceData(d1,0.7,1.0);
-			
 			maxValue = MyMath.getMaxInArr(d1) * 1.3;
-			
 			filter = new FilterKalman(maxValue * 0.15, maxValue * 0.35);
 			filter2 = filter.runFilter(balanc2);
 			filter2 = MyMath.balanceData(filter2,0.7,0.5);
 			filtred2.add(filter2);
 			
-			d2 = new double[filter2.length];
-			
-			for(int i = 0; i < filter2.length; ++i) {
-				d2[i] = d1[i] - filter2[i];
-			}
+			d2 = MyMath.minusArr(d1, filter2);
 			delta2.add(d2);
 			
-			balanc3 = MyMath.balanceData(d2,0.7,1.0);
-			
+			balanc3 = MyMath.balanceData(d2,0.6,1.0);
 			maxValue = MyMath.getMaxInArr(d2) * 1.3;
-			
 			filter = new FilterKalman(maxValue * 0.35, maxValue * 0.05);
 			filter3 = filter.runFilter(balanc3);
-			filter3 = MyMath.balanceData(filter3,0.8,0.8);
+			filter3 = MyMath.balanceData(filter3,0.7,0.8);
 			filtred3.add(filter3);
 			
-			d3 = new double[filter3.length];
-			
-			for(int i = 0; i < filter3.length; ++i) {
-				d3[i] = d2[i] - filter3[i];
-			}
+			d3 = MyMath.minusArr(d2, filter3);
 			delta3.add(d3);
 			
 			filter4 = MyMath.balanceData(d3,0.6,1.0);
+			filtred4.add(filter4);
+			
+			names.add(String.format("%.0f", prevATMnum));
+		}
+	}
+	
+	private void processListsBack(List<Double> ad, List<Date> dt, double prevATMnum) {
+		FilterKalman filter;
+		
+		Date[] date;
+		double[] atmdata;
+		double[] balanc1;
+		double[] filter1;
+		double[] d1;
+		double[] balanc2;
+		double[] filter2;
+		double[] d2;
+		double[] balanc3;
+		double[] filter3;
+		double[] d3;
+		double[] filter4;
+		
+		double maxValue;
+		
+		if(ad.size() > 0) {
+			atmdata = new double[ad.size()];
+			date = new Date[ad.size()];
+			
+			for(int i = 0; i < ad.size(); ++i) {
+				atmdata[i] = ad.get(i).doubleValue();
+				date[i] = dt.get(i);
+			}
+			
+			dataList.add(atmdata);
+			dateVal.add(date);
+			
+			balanc3 = MyMath.balanceData(atmdata,0.8,1.0);
+			maxValue = MyMath.getMaxInArr(atmdata) * 1.3;
+			filter = new FilterKalman(maxValue * 0.50, maxValue * 0.03);
+			filter3 = filter.runFilter(balanc3);
+			filter3 = MyMath.balanceData(filter3,0.8,0.8);
+			
+			balanc2 = MyMath.balanceData(filter3,0.6,0.8);
+			maxValue = MyMath.getMaxInArr(filter3) * 1.3;
+			filter = new FilterKalman(maxValue * 0.15, maxValue * 0.45);
+			filter2 = filter.runFilter(balanc2);
+			filter2 = MyMath.balanceData(filter2,0.6,0.5);
+
+			balanc1 = MyMath.balanceData(filter2,0.5,0.5);
+			maxValue = MyMath.getMaxInArr(filter2) * 1.3;
+			filter = new FilterKalman(maxValue * 0.0003, maxValue * 0.70);
+			filter1 = filter.runFilter(balanc1);
+			filter1 = MyMath.balanceData(filter1,0.5,0.3);
+
+			filter4 = MyMath.minusArr(atmdata, filter3);
+			filter3 = MyMath.minusArr(filter3, filter2);
+			filter2 = MyMath.minusArr(filter2, filter1);
+			d1 = MyMath.minusArr(atmdata, filter1);
+			d2 = MyMath.minusArr(d1, filter2);
+			d3 = MyMath.minusArr(d2, filter3);
+			
+			filtred1.add(filter1);
+			delta1.add(d1);
+			filtred2.add(filter2);
+			delta2.add(d2);
+			filtred3.add(filter3);
+			delta3.add(d3);
 			filtred4.add(filter4);
 			
 			names.add(String.format("%.0f", prevATMnum));
@@ -278,10 +327,11 @@ public class DataIO {
 		HSSFWorkbook workbook;
 		HSSFSheet sheet;
 		
-		double[] out1 = predTest(filtred1.get(i),15,8, names.get(i) + " 1");
-		double[] out2 = predTest(filtred2.get(i),20,10, names.get(i) + " 2");
-		double[] out3 = predTest(filtred3.get(i),27,15, names.get(i) + " 3");
-		double[] out4 = predTest(filtred4.get(i),35,18, names.get(i) + " 4");
+		double[] out1 = predTest(filtred1.get(i),30,15, names.get(i) + " 1");
+		double[] out2 = predTest(filtred2.get(i),40,22, names.get(i) + " 2");
+		double[] out3 = predTest(filtred3.get(i),45,25, names.get(i) + " 3");
+		double[] out4 = predTest(filtred4.get(i),50,30, names.get(i) + " 4");
+		double[] out = predTest(dataList.get(i),80,40, names.get(i) + " all");
 		
 		try {
 			FileInputStream file = new FileInputStream(new File(fileName));
@@ -338,6 +388,12 @@ public class DataIO {
 		cell = row.createCell(12);
 		cell.setCellValue("Pred 4");
 		
+		cell = row.createCell(13);
+		cell.setCellValue("Result");
+		
+		cell = row.createCell(14);
+		cell.setCellValue("Result all");
+		
 		for(int j = 0; j < dateVal.get(i).length; ++j) {
 			row = sheet.createRow(j+1);
 			
@@ -379,6 +435,12 @@ public class DataIO {
 			
 			cell = row.createCell(12);
 			cell.setCellValue(out4[j]);
+			
+			cell = row.createCell(13);
+			cell.setCellValue(out1[j] + out2[j] + out3[j] + out4[j]);
+			
+			cell = row.createCell(14);
+			cell.setCellValue(out[j]);
 		}
 		
 		try {
@@ -396,15 +458,16 @@ public class DataIO {
 		NeuroNet net;
 		Train tga;
 		
-		double[] dt = data;
+		double[] dt = MyMath.getSubArr(0, data.length - 7, data);
 		double[] in;
-		double[] out = new double[dt.length];
+		double[] res;
+		double[] out = new double[data.length];
 		
 		double maxValue;
 		double minValue;
 		
 		maxValue = MyMath.getMaxInArr(dt) * 1.3;
-		minValue = MyMath.getMaxInArr(dt);
+		minValue = MyMath.getMinInArr(dt);
 		if(minValue < 0)
 			minValue *= 1.3;
 		else
@@ -428,6 +491,11 @@ public class DataIO {
 		for(int j = 0; j < (dt.length - net.getNumOfInputs() - net.getNumOfOutputs() + 1); ++j) {
 			in = MyMath.getSubArr(j,net.getNumOfInputs(),dt);
 			out[j + net.getNumOfInputs()] = net.runNet(in)[0];
+		}
+		in = MyMath.getSubArr(dt.length - net.getNumOfInputs(),net.getNumOfInputs(),dt);
+		res = net.predictRun(in, 7);
+		for(int j = 0; j < 7; ++j) {
+			out[out.length - 7 + j] = res[j];
 		}
 		
 		return out;
